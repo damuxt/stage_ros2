@@ -1,0 +1,77 @@
+
+# -----------------------------------------------------------------------------
+# 设置窗体
+# 设置模拟器地图分辨率(以 米/像素 为单位)
+resolution 0.02
+# 设置模拟器的时间步长(以 毫秒 为单位)
+interval_sim 100 
+
+# 配置窗体参数f
+window
+(
+  size [ 635.000 666.000 ] # 窗体尺寸(以 像素 为单位)
+  scale 35  # 缩放比
+  center [ 0  0 ] # 地图相对于窗体的偏移量(以 米 为单位)
+  rotate [ 0  0 ] # 地图旋转角度
+
+  show_data 1     # 是否显示传感器数据 1=on 0=off
+)
+
+# -----------------------------------------------------------------------------
+# 设置地图(定义模型)
+define floorplan model
+(
+  color "gray30"  # 颜色
+  boundary 1  # 为地图设置边框
+
+  gui_nose 0
+  gui_grid 0 
+
+  gui_outline 0
+  gripper_return 0
+  fiducial_return 0
+  laser_return 1
+)
+
+# 加载地图
+floorplan
+( 
+  name "my_house"
+  size [16.000 16.000 0.800]
+  pose [0 0 0 0]
+  bitmap "maps/my_house.jpg"
+  gui_move 0
+)
+
+# -----------------------------------------------------------------------------
+# 添加障碍物
+# define a block
+define my_block model
+(
+  size [1.0 1.0 1.0]
+  gui_nose 0
+  gui_grid 0
+  gui_outline 0
+)
+
+# throw in a block
+my_block( pose [ 2 -6 0 0 ] color "green")
+my_block( pose [ 5 0 0 360 ] color "red" bitmap "maps/ghost.png")
+
+
+# -----------------------------------------------------------------------------
+# 生成机器人
+# 文件包含
+include "robot/mycar.inc"
+
+car_base_with_laser_camera(
+  name "robot_0"
+  color "red"
+  pose [ -7 -7 0 45 ] 
+)
+
+car_base_with_laser_camera(
+  name "robot_1"
+  color "yellow"
+  pose [ -5 -5 0 0 ] 
+)
