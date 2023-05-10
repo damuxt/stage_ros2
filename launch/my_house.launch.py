@@ -12,6 +12,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     this_directory = get_package_share_directory('stage_ros2')
+    use_sim_time = LaunchConfiguration('use_sim_time',  default='true')
 
     stage_world_arg = DeclareLaunchArgument(
         'world',
@@ -37,5 +38,13 @@ def generate_launch_description():
             parameters=[{
                 "world_file": [LaunchConfiguration('world_file')]}],
             remappings=[("/base_scan","/scan")]
+        ),
+        Node(
+            package='rviz2',
+            executable='rviz2',
+            name='rviz2',
+            arguments=['-d', os.path.join(
+            this_directory,
+            'config/rviz/example.rviz')],
         )
     ])
